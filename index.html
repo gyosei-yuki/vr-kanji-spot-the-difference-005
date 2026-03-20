@@ -1,0 +1,497 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VR 漢字間違い探し【005】水性、龍高・玉堂の部屋。</title>
+    <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script src="js/main.js"></script>
+  </head>
+
+  <body>
+    <a-scene>
+      <!-- assets -->
+      <a-assets>
+        <img id="sky" src="assets/sky.jpg" />
+
+        <img id="tunnel" src="assets/tunnel.png" />
+        <img id="tunnel-NRM" src="assets/tunnel-NRM.png" />
+
+        <img id="tracks" src="assets/tracks37.png" />
+        <img id="tracks-NRM" src="assets/tracks37-NRM.png" />
+
+        <img id="kou" src="assets/stage/kou.png" />
+        <img id="kou-NRM" src="assets/stage/kou-NRM.png" />
+
+        <img id="gyoku" src="assets/stage/gyoku.png" />
+        <img id="gyoku-NRM" src="assets/stage/gyoku-NRM.png" />
+
+        <img id="dou" src="assets/stage/dou.png" />
+        <img id="dou-NRM" src="assets/stage/dou-NRM.png" />
+
+        <img id="ryu" src="assets/stage/ryu.png" />
+        <img id="ryu-NRM" src="assets/stage/ryu-NRM.png" />
+
+        <img id="q-kou1" src="assets/quiz/kou1.png" />
+        <img id="q-kou1-NRM" src="assets/quiz/kou1-NRM.png" />
+        <img id="q-kou2" src="assets/quiz/kou2.png" />
+        <img id="q-kou2-NRM" src="assets/quiz/kou2-NRM.png" />
+        <img id="q-kou3" src="assets/quiz/kou3.png" />
+        <img id="q-kou3-NRM" src="assets/quiz/kou3-NRM.png" />
+
+        <img id="q-gyoku1" src="assets/quiz/gyoku1.png" />
+        <img id="q-gyoku1-NRM" src="assets/quiz/gyoku1-NRM.png" />
+        <img id="q-gyoku2" src="assets/quiz/gyoku2.png" />
+        <img id="q-gyoku2-NRM" src="assets/quiz/gyoku2-NRM.png" />
+        <img id="q-gyoku3" src="assets/quiz/gyoku3.png" />
+        <img id="q-gyoku3-NRM" src="assets/quiz/gyoku3-NRM.png" />
+
+        <img id="q-dou1" src="assets/quiz/dou1.png" />
+        <img id="q-dou1-NRM" src="assets/quiz/dou1-NRM.png" />
+        <img id="q-dou2" src="assets/quiz/dou2.png" />
+        <img id="q-dou2-NRM" src="assets/quiz/dou2-NRM.png" />
+        <img id="q-dou3" src="assets/quiz/dou3.png" />
+        <img id="q-dou3-NRM" src="assets/quiz/dou3-NRM.png" />
+
+        <img id="q-ryu1" src="assets/quiz/ryu1.png" />
+        <img id="q-ryu1-NRM" src="assets/quiz/ryu1-NRM.png" />
+        <img id="q-ryu2" src="assets/quiz/ryu2.png" />
+        <img id="q-ryu2-NRM" src="assets/quiz/ryu2-NRM.png" />
+        <img id="q-ryu3" src="assets/quiz/ryu3.png" />
+        <img id="q-ryu3-NRM" src="assets/quiz/ryu3-NRM.png" />
+
+        <img id="correct" src="assets/correct.png" />
+      </a-assets>
+
+      <!-- Camera Rig -->
+      <a-entity
+        movement-controls="speed: 1; constrainToNavMesh: true"
+        position="0 0 45"
+      >
+        <!-- Camera -->
+        <a-entity
+          camera
+          position="0 1.6 0"
+          look-controls="pointerLockEnabled: true"
+          move-check="raycaster:#move"
+          quiz-check="raycaster:#quiz"
+        >
+          <!-- timer -->
+          <a-text
+            color="#FF0000"
+            align="center"
+            position="0 1 -1.5"
+            value="0"
+          ></a-text>
+
+          <a-entity
+            id="move"
+            rayOrigin="mouse"
+            raycaster="objects: .gate; far: 0.15"
+          ></a-entity>
+          <a-cursor
+            id="quiz"
+            rayOrigin="mouse"
+            raycaster="objects: .answer"
+          ></a-cursor>
+        </a-entity>
+      </a-entity>
+
+      <!-- nav-mesh -->
+      <a-entity position=" 0 -0.1 0">
+        <!-- 1st stage -->
+        <a-plane
+          id="first-gate"
+          color="#000"
+          width="5"
+          height="100"
+          rotation="-90 0 0"
+          position="0 0 0"
+          nav-mesh
+        >
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 49 1"
+            rotation="90 0 0"
+            class="gate first-end"
+            scale="10 10 0"
+          >
+          </a-plane>
+        </a-plane>
+        <a-plane
+          id="first-stage"
+          color="#000"
+          width="98"
+          height="98"
+          rotation="-90 0 0"
+          position="0 0 -95"
+        ></a-plane>
+
+        <!-- 2st stage -->
+        <a-plane
+          id="second-gate"
+          color="#000"
+          width="5"
+          height="100"
+          rotation="-90 90 0"
+          position="-95 0 -95"
+          visible="false"
+        >
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 -47 1"
+            rotation="90 0 0"
+            class="gate second-start"
+            scale="10 10 0"
+          >
+          </a-plane>
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 49 1"
+            rotation="90 0 0"
+            class="gate second-end"
+            scale="10 10 0"
+          >
+          </a-plane>
+        </a-plane>
+        <a-plane
+          id="second-stage"
+          color="#000"
+          width="98"
+          height="98"
+          rotation="-90 0 0"
+          position="-190 0 -95"
+        >
+        </a-plane>
+
+        <!-- 3st stage -->
+        <a-plane
+          id="third-gate"
+          color="#000"
+          width="5"
+          height="100"
+          rotation="-90 0 0"
+          position="-190 0 -190"
+          visible="false"
+        >
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 -47 1"
+            rotation="90 0 0"
+            class="gate third-start"
+            scale="10 10 0"
+          >
+          </a-plane>
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 49 1"
+            rotation="90 0 0"
+            class="gate third-end"
+            scale="10 10 0"
+          >
+          </a-plane>
+        </a-plane>
+        <a-plane
+          id="third-stage"
+          color="#000"
+          width="98"
+          height="98"
+          rotation="-90 0 0"
+          position="-190 0 -285"
+        >
+        </a-plane>
+
+        <!-- 4st stage -->
+        <a-plane
+          id="fourth-gate"
+          color="#000"
+          width="5"
+          height="100"
+          rotation="-90 90 0"
+          position="-95 0 -285"
+          visible="false"
+        >
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 47 1"
+            rotation="-90 0 0"
+            class="gate fourth-start"
+            scale="10 10 0"
+          >
+          </a-plane>
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 -49 1"
+            rotation="-90 0 0"
+            class="gate fourth-end"
+            scale="10 10 0"
+          >
+          </a-plane>
+        </a-plane>
+        <a-plane
+          id="fourth-stage"
+          color="#000"
+          width="98"
+          height="98"
+          rotation="-90 0 0"
+          position="0 0 -285"
+        >
+        </a-plane>
+
+        <!-- goal -->
+        <a-plane
+          id="goal-gate"
+          color="#000"
+          width="5"
+          height="100"
+          rotation="-90 0 0"
+          position="0 0 -380"
+          visible="false"
+        >
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 -47 1"
+            rotation="90 0 0"
+            class="gate goal-start"
+            scale="10 10 0"
+          >
+          </a-plane>
+          <a-plane
+            color="#333333"
+            material="opacity:0"
+            position="0 49 1"
+            rotation="90 0 0"
+            class="gate goal-end"
+            scale="10 10 0"
+          >
+          </a-plane>
+        </a-plane>
+      </a-entity>
+
+      <!-- 1st stage -->
+      <a-entity position="0 0 0" rotation="0 0 0">
+        <a-plane
+          color="#666"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          width="100"
+          height="100"
+          depth="1"
+          rotation="-90 0 0"
+          position="0 0 0"
+        >
+          <a-plane
+            material="src:#tracks; normalMap: #tracks-NRM; transparent: true"
+            width=" 5.12"
+            height="2.56"
+            position="0 0 0.01"
+            scale="1 37 1"
+          >
+          </a-plane>
+        </a-plane>
+        <a-cylinder
+          id="first-tunnel"
+          color="#333"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          side="double"
+          height="100"
+          radius="5"
+          open-ended="true"
+          rotation="270 0 0"
+          position="0 1 0"
+        ></a-cylinder>
+        <a-box
+          class="box-stage"
+          material="src: #kou;repeat: -10, 10; normalMap: #kou-NRM; normalTextureRepeat: -10, 10"
+          side="back"
+          width="100"
+          height="100"
+          depth="100"
+          position="0 50.1 -95"
+        >
+          <!-- 3文字のランダムなクイズ -->
+        </a-box>
+      </a-entity>
+
+      <!-- 2st stage -->
+      <a-entity position="-95 0 -95" rotation="0 90 0">
+        <a-plane
+          color="#666"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          width="100"
+          height="100"
+          depth="1"
+          rotation="-90 0 0"
+          position="0 0 0"
+        >
+          <a-plane
+            material="src:#tracks; normalMap: #tracks-NRM; transparent: true"
+            width=" 5.12"
+            height="2.56"
+            position="0 0 0.01"
+            scale="1 37 1"
+          >
+          </a-plane>
+        </a-plane>
+        <a-cylinder
+          id="second-tunnel"
+          color="#333"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          side="double"
+          height="100"
+          radius="5"
+          open-ended="true"
+          rotation="270 0 0"
+          position="0 1 0"
+          visible="false"
+        ></a-cylinder>
+        <a-box
+          class="box-stage"
+          material="src: #gyoku;repeat: -10, 10; normalMap: #gyoku-NRM; normalTextureRepeat: -10, 10"
+          side="back"
+          width="100"
+          height="100"
+          depth="100"
+          position="0 50.1 -95"
+        >
+          <!-- 3文字のランダムなクイズ -->
+        </a-box>
+      </a-entity>
+
+      <!-- 3st stage -->
+      <a-entity position="-190 0 -190" rotation="0 0 0">
+        <a-plane
+          color="#666"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          width="100"
+          height="100"
+          depth="1"
+          rotation="-90 0 0"
+          position="0 0 0"
+        >
+          <a-plane
+            material="src:#tracks; normalMap: #tracks-NRM; transparent: true"
+            width=" 5.12"
+            height="2.56"
+            position="0 0 0.01"
+            scale="1 37 1"
+          >
+          </a-plane>
+        </a-plane>
+        <a-cylinder
+          id="third-tunnel"
+          color="#333"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          side="double"
+          height="100"
+          radius="5"
+          open-ended="true"
+          rotation="270 0 0"
+          position="0 1 0"
+          visible="false"
+        ></a-cylinder>
+        <a-box
+          class="box-stage"
+          material="src: #dou;repeat: -10, 10; normalMap: #dou-NRM; normalTextureRepeat: -10, 10"
+          side="back"
+          width="100"
+          height="100"
+          depth="100"
+          position="0 50.1 -95"
+        >
+          <!-- 3文字のランダムなクイズ -->
+        </a-box>
+      </a-entity>
+
+      <!-- 4st stage -->
+      <a-entity position="-95 0 -285" rotation="0 270 0">
+        <a-plane
+          color="#666"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          width="100"
+          height="100"
+          depth="1"
+          rotation="-90 0 0"
+          position="0 0 0"
+        >
+          <a-plane
+            material="src:#tracks; normalMap: #tracks-NRM; transparent: true"
+            width=" 5.12"
+            height="2.56"
+            position="0 0 0.01"
+            scale="1 37 1"
+          >
+          </a-plane>
+        </a-plane>
+        <a-cylinder
+          id="fourth-tunnel"
+          color="#333"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          side="double"
+          height="100"
+          radius="5"
+          open-ended="true"
+          rotation="270 0 0"
+          position="0 1 0"
+          visible="false"
+        ></a-cylinder>
+        <a-box
+          class="box-stage"
+          material="src: #ryu;repeat: -10, 10; normalMap: #ryu-NRM; normalTextureRepeat: -10, 10"
+          side="back"
+          width="100"
+          height="100"
+          depth="100"
+          position="0 50.1 -95"
+        >
+          <!-- 3文字のランダムなクイズ -->
+        </a-box>
+      </a-entity>
+
+      <!-- goal -->
+      <a-entity position="0 0 -380" rotation="0 0 0">
+        <a-plane
+          color="#666"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          width="100"
+          height="100"
+          depth="1"
+          rotation="-90 0 0"
+          position="0 0 0"
+        >
+          <a-plane
+            material="src:#tracks; normalMap: #tracks-NRM; transparent: true"
+            width=" 5.12"
+            height="2.56"
+            position="0 0 0.01"
+            scale="1 37 1"
+          >
+          </a-plane>
+        </a-plane>
+        <a-cylinder
+          id="goal-tunnel"
+          color="#333"
+          material="src: #tunnel; normalMap: #tunnel-NRM"
+          side="double"
+          height="100"
+          radius="5"
+          open-ended="true"
+          rotation="270 0 0"
+          position="0 1 0"
+          visible="false"
+        ></a-cylinder>
+      </a-entity>
+
+      <!-- sky -->
+      <a-sky src="#sky"></a-sky>
+    </a-scene>
+  </body>
+</html>
